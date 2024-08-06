@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="default_web_client_id">26575654240-31q81dfdrf92faub9qbs5isd0eg9fat5.apps.googleusercontent.com</string>
+
+    <string name="item_perfil">Perfil</string>
+    <string name="item_usuarios">Usuarios</string>
+    <string name="item_chats">Chats</string>
+
+    <string name="titulo">Titulo</string>
+
+    <string name="opcionEmail">Continuar con Email</string>
+    <string name="opcionGoogle">Continuar con Google</string>
+
+    <string name="login">Login</string>
+    <string name="email">Correo Electrónico</string>
+    <string name="contrasena">Contraseña</string>
+    <string name="ingresar">Ingresar</string>
+    <string name="no_tienes_cuenta">¿No tienes una cuenta?</string>
+    <string name="registrarme">Registrarme</string>
+
+    <string name="registro">Registro</string>
+    <string name="nombres">Nombres</string>
+    <string name="rep_contrasena">Repita la contraseña</string>
+    <string name="registrar">Registrar</string>
+
+    <string name="actualizar_info">Actualizar</string>
+    <string name="cerrar_sesion">Cerrar Sesión</string>
+
+    <string name="txt_nombres">Nombres: </string>
+    <string name="tv_nombres"> -- </string>
+    <string name="txt_email">Email: </string>
+    <string name="tv_email"> -- </string>
+    <string name="txt_proveedor">Proveedor: </string>
+    <string name="tv_proveedor"> -- </string>
+    <string name="txt_tiempo_registro">Miembro desde: </string>
+    <string name="tv_tiempo_registro"> -- </string>
+
+    <string name="txt_titulo_editar">Editar Información</string>
+    <string name="actualizar">Actualizar</string>
+
+</resources>
