@@ -114,7 +114,11 @@ class EditarInformacionActivity : AppCompatActivity() {
     }
 
     private val solicitarPermisoAlmacenamiento = registerForActivityResult(ActivityResultContracts.RequestPermission()) { esConcedido ->
-        Toast.makeText(applicationContext, "El permiso es denegado", Toast.LENGTH_SHORT)
+        if(esConcedido) {
+            abrirGaleria()
+        } else {
+            Toast.makeText(applicationContext, "El permiso es denegado", Toast.LENGTH_SHORT)
+        }
     }
 
     private var nombres = ""

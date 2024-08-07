@@ -57,4 +57,11 @@
 
     <string name="et_buscar_usuario">Buscar Usuario</string>
 
+    <string name="txt_nombre_usuario">Nombres</string>
+    <string name="txt_mensaje_chat">Escriba algo</string>
+    <string name="txt_mensaje_tiempo">dd/MM/yyyy hh:mnn</string>
+
+    <string name="et_buscar">Buscar</string>
+    <string name="txt_fecha">dd/MM/yyyy</string>
+
 </resources>
