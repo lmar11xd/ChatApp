@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -87,10 +88,15 @@ class ChatActivity : AppCompatActivity() {
 
                     val adaptadorChat = AdaptadorChat(this@ChatActivity, mensajes)
                     binding.rvChats.adapter = adaptadorChat
+
+                    binding.rvChats.setHasFixedSize(true)
+                    var linearLayoutManager = LinearLayoutManager(this@ChatActivity)
+                    linearLayoutManager.stackFromEnd = true
+                    binding.rvChats.layoutManager = linearLayoutManager
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+
                 }
 
             })
