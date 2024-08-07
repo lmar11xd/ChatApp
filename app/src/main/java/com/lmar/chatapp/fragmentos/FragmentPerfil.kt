@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.lmar.chatapp.CambiarContrasenaActivity
 import com.lmar.chatapp.Constantes
 import com.lmar.chatapp.EditarInformacionActivity
 import com.lmar.chatapp.OpcionesLoginActivity
@@ -42,12 +43,18 @@ class FragmentPerfil : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnCambiarContrasena.visibility = View.GONE
+
         firebaseAuth = FirebaseAuth.getInstance()
 
         cargarInformacion()
 
         binding.btnActualizarInfo.setOnClickListener {
             startActivity(Intent(mContext, EditarInformacionActivity::class.java))
+        }
+
+        binding.btnCambiarContrasena.setOnClickListener {
+            startActivity(Intent(mContext, CambiarContrasenaActivity::class.java))
         }
 
         binding.btnCerrarSesion.setOnClickListener{
@@ -92,6 +99,10 @@ class FragmentPerfil : Fragment() {
                             "${e.message}",
                             Toast.LENGTH_SHORT
                         ).show()
+                    }
+
+                    if(proveedor == "Email") {
+                        binding.btnCambiarContrasena.visibility = View.VISIBLE
                     }
                 }
 

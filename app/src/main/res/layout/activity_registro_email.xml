@@ -32,7 +32,7 @@
         <EditText
             android:id="@+id/etNombres"
             android:hint="@string/nombres"
-            android:inputType="textPersonName"
+            android:inputType="textCapWords|textPersonName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,12 @@
         android:theme="@style/Theme.ChatApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".CambiarContrasenaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OlvideContrasenaActivity"
+            android:exported="false" />
         <activity
             android:name=".EditarInformacionActivity"
             android:exported="false" />

@@ -29,6 +29,10 @@ class LoginEmailActivity : AppCompatActivity() {
         progressDialog.setTitle("Espere por favor")
         progressDialog.setCanceledOnTouchOutside(false)
 
+        binding.tvRecuperarCuenta.setOnClickListener {
+            startActivity(Intent(applicationContext, OlvideContrasenaActivity::class.java))
+        }
+
         binding.btnIngresar.setOnClickListener {
             validarInformacion()
         }
