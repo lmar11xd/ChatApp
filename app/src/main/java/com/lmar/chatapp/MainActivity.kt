@@ -108,12 +108,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        actualizarEstado("Online")
+        if(firebaseAuth.currentUser != null) {
+            actualizarEstado("Online")
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        actualizarEstado("Offline")
+        if(firebaseAuth.currentUser != null) {
+            actualizarEstado("Offline")
+        }
     }
 
     private fun agregarToken() {

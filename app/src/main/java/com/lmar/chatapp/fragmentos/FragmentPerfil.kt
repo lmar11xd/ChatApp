@@ -3,6 +3,7 @@ package com.lmar.chatapp.fragmentos
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,10 +59,32 @@ class FragmentPerfil : Fragment() {
         }
 
         binding.btnCerrarSesion.setOnClickListener{
-            firebaseAuth.signOut()
-            startActivity(Intent(mContext, OpcionesLoginActivity::class.java))
-            activity?.finishAffinity()
+            actualizarEstado()
+            cerrarSesion()
         }
+    }
+
+    private fun cerrarSesion(){
+        object: CountDownTimer(2000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+
+            }
+
+            override fun onFinish() {
+                //Pasado 2 segundos se va ejecutar esta línea de código
+                firebaseAuth.signOut()
+                startActivity(Intent(mContext, OpcionesLoginActivity::class.java))
+                activity?.finishAffinity()
+            }
+        }.start()
+    }
+
+    private fun actualizarEstado() {
+        val ref = FirebaseDatabase.getInstance().reference.child("Usuarios").child(firebaseAuth.uid!!)
+
+        val hashMap = HashMap<String, Any>()
+        hashMap["estado"] = "Offline"
+        ref!!.updateChildren(hashMap)
     }
 
     private fun cargarInformacion() {
@@ -90,7 +113,7 @@ class FragmentPerfil : Fragment() {
 
                     //Setear la imagen
                     try {
-                        Glide.with(mContext)
+                        Glide.with(mContext.applicationContext)
                             .load(imagen).placeholder(R.drawable.ic_img_perfil)
                             .into(binding.ivPerfil)
                     } catch (e: Exception) {

@@ -168,7 +168,7 @@ class ChatActivity : AppCompatActivity() {
 
                     binding.tvNombreUsuario.text = nombres
                     try {
-                        Glide.with(this@ChatActivity)
+                        Glide.with(applicationContext)
                             .load(imagen)
                             .placeholder(R.drawable.perfil_usuario)
                             .into(binding.ivToolbar)
@@ -274,12 +274,16 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        actualizarEstado("Online")
+        if(firebaseAuth.currentUser != null) {
+            actualizarEstado("Online")
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        actualizarEstado("Offline")
+        if(firebaseAuth.currentUser != null) {
+            actualizarEstado("Offline")
+        }
     }
 
     private fun prepararNotificacion(mensaje: String) {

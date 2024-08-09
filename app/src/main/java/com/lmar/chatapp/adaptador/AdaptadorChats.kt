@@ -100,12 +100,10 @@ class AdaptadorChats: RecyclerView.Adapter<AdaptadorChats.HolderChats> {
     private fun cargarInfoUsuarioRecibido(modeloChats: Chats, holder: AdaptadorChats.HolderChats) {
         val emisorUid = modeloChats.emisorUid
         val receptorUid = modeloChats.receptorUid
-
-        var uidRecibimos = ""
-        if(emisorUid == miUid) {
-            uidRecibimos = receptorUid
+        var uidRecibimos: String = if(emisorUid == miUid) {
+            receptorUid
         } else {
-            uidRecibimos = emisorUid
+            emisorUid
         }
 
         modeloChats.uidRecibimos = uidRecibimos
@@ -122,7 +120,7 @@ class AdaptadorChats: RecyclerView.Adapter<AdaptadorChats.HolderChats> {
                     holder.tvNombres.text = nombres
 
                     try {
-                        Glide.with(context)
+                        Glide.with(context.applicationContext)
                             .load(imagen)
                             .placeholder(R.drawable.ic_imagen_perfil)
                             .into(holder.ivPerfil)

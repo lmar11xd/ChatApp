@@ -39,7 +39,7 @@ class MyFcmService: FirebaseMessagingService() {
         configurarCanalNotificacion(notificationManager)
 
         val intent = Intent(this, ChatActivity::class.java)
-        intent.putExtra("senderUid", senderUid)
+        intent.putExtra("uid", senderUid)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
