@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#cccccc"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
+    android:padding="5dp"
+    android:layout_gravity="center">
+
+    <com.github.chrisbanes.photoview.PhotoView
+        android:id="@+id/pv_imagen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_cerrar"
+        android:text="@string/cerrar"
+        android:textAllCaps="true"
+        android:layout_alignParentBottom="true"
+        app:cornerRadius="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

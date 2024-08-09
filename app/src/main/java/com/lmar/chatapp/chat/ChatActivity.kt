@@ -6,10 +6,14 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -22,6 +26,10 @@ import com.lmar.chatapp.R
 import com.lmar.chatapp.adaptador.AdaptadorChat
 import com.lmar.chatapp.databinding.ActivityChatBinding
 import com.lmar.chatapp.entidad.Chat
+import com.lmar.chatapp.util.AccessToken
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.json.JSONObject
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
@@ -33,6 +41,11 @@ class ChatActivity : AppCompatActivity() {
 
     private var chatRuta = ""
     private var imagenUri: Uri? = null
+
+    private var miNombre = ""
+    private var recibimosToken = ""
+
+    private var accestokenFcm = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +62,10 @@ class ChatActivity : AppCompatActivity() {
         miUid = firebaseAuth.uid!!
 
         chatRuta = Constantes.rutaChat(uid, miUid)
+
+        cargarAccesTokenFcm()
+
+        cargarMiInformacion()
 
         binding.fabAdjuntar.setOnClickListener {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -68,6 +85,29 @@ class ChatActivity : AppCompatActivity() {
 
         cargarInfo()
         cargarMensajes()
+    }
+
+    private fun cargarAccesTokenFcm() {
+        val accessToken = AccessToken()
+        lifecycleScope.launch(Dispatchers.IO) {
+            accestokenFcm = accessToken.accessToken
+            Log.e("xyz", "initAuth2Receiver: $accestokenFcm")
+        }
+    }
+
+    private fun cargarMiInformacion() {
+        val ref = FirebaseDatabase.getInstance().getReference("Usuarios")
+        ref.child("${firebaseAuth.uid}")
+            .addValueEventListener(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    miNombre = "${snapshot.child("nombres").value}"
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+
+                }
+
+            })
     }
 
     private fun cargarMensajes() {
@@ -120,6 +160,11 @@ class ChatActivity : AppCompatActivity() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val nombres = "${snapshot.child("nombres").value}"
                     val imagen = "${snapshot.child("imagen").value}"
+                    val estado = "${snapshot.child("estado").value}"
+
+                    recibimosToken = "${snapshot.child("fcmToken").value}"
+
+                    binding.tvEstadoChat.text = estado
 
                     binding.tvNombreUsuario.text = nombres
                     try {
@@ -206,10 +251,84 @@ class ChatActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 binding.etMensajeChat.setText("")
+
+                if(tipoMensaje == Constantes.MENSAJE_TIPO_TEXTO) {
+                    prepararNotificacion(mensaje)
+                } else {
+                    prepararNotificacion("Se envió una imagen")
+                }
             }
             .addOnFailureListener { e ->
                 progressDialog.dismiss()
                 Toast.makeText(this, "No se pudo enviar el mensaje debido a ${e.message}", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun actualizarEstado(estado: String) {
+        val ref = FirebaseDatabase.getInstance().reference.child("Usuarios")
+            .child(firebaseAuth.uid!!)
+        val hashMap = HashMap<String, Any>()
+        hashMap["estado"] = estado
+        ref!!.updateChildren(hashMap)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        actualizarEstado("Online")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        actualizarEstado("Offline")
+    }
+
+    private fun prepararNotificacion(mensaje: String) {
+        val data = JSONObject()
+        val message = JSONObject()
+        val messageData = JSONObject()
+        val notification = JSONObject()
+
+        try {
+            messageData.put("notificationType", "${Constantes.NOTIFICACION_NUEVO_MENSAJE}")
+            messageData.put("senderUid", "${firebaseAuth.uid}")
+
+            notification.put("title", "${miNombre}")
+            notification.put("body", mensaje)
+            //notification.put("sound", "default")
+
+            message.put("token", recibimosToken)
+            message.put("notification", notification)
+            message.put("data", messageData)
+
+            data.put("message", message)
+        } catch (e: Exception) {
+
+        }
+
+        enviarNotificacion(data)
+    }
+
+    private fun enviarNotificacion(data: JSONObject) {
+        val jsonObjectRequest: JsonObjectRequest = object: JsonObjectRequest(
+            Method.POST,
+            Constantes.URL_API_MESSAGE,
+            data,
+            com.android.volley.Response.Listener {
+                //Notificacion enviada
+            },
+            com.android.volley.Response.ErrorListener {
+
+            }
+        ) {
+            override fun getHeaders(): MutableMap<String, String> {
+                val headers = HashMap<String, String>()
+                headers["Content-Type"] = "application/json"
+                headers["Authorization"] = "Bearer $accestokenFcm"
+                //headers["Authorization"] = "key=${Constantes.FCM_SERVER_KEY}"
+                return headers
+            }
+        }
+
+        Volley.newRequestQueue(this).add(jsonObjectRequest)
     }
 }

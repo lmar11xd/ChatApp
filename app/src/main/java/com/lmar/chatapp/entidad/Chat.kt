@@ -5,7 +5,7 @@ class Chat {
     var tipoMensaje: String = ""
     var mensaje: String = ""
     var emisorUid: String = ""
-    var receptopUid: String = ""
+    var receptorUid: String = ""
     var tiempo: Long = 0
 
     constructor()
@@ -21,7 +21,7 @@ class Chat {
         this.tipoMensaje = tipoMensaje
         this.mensaje = mensaje
         this.emisorUid = emisorUid
-        this.receptopUid = receptopUid
+        this.receptorUid = receptopUid
         this.tiempo = tiempo
     }
 
